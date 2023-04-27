@@ -1,0 +1,13 @@
+<apex:page controller="OneDrivePageController" action="{!OneDriveAuth}">
+<apex:form >
+    <apex:pageblock >
+        <!--
+        <apex:commandbutton action="{!OneDriveAuth}" value="Onedrive Authentication">		
+    	</apex:commandbutton>
+		-->
+</apex:pageblock>
+   <!--
+    <apex:image width="500px" height="300px" url="https://dl.dropboxusercontent.com/apitl/1/AABJZ7UxQGabg0dl14NGCKO2AHMLX41T_9JAVsgCJBR3GHbL1qXzo9peddJMizRE-k-ubrdlJMj3g-2w5ScGWAhnOy_xTxJN0VB4tnmdLjAmNyVPRH3SMG6Uc4mtQCenHeQun0z4OTD2Bn-QaWhAIybkXYV6ABD4ePoPqXCAen666nX5UcQJS7saTb3X9U8D61jFEzhtLAHgfiwcs8P51WowoKHgMH9Iwiw-85OWWro00GO0x9t0oqh0MGaVbz6E1vzEZr1_FO-Wc6pOA4CBM8K9XpGezFJ5jWWPSB-YBDUAL6xtfAF6cJYz5dZb0iCkgrO7nrOT53q1zRYPxuCAix16ZyDlU9kKwButVTrcp-NtXA"/>
+	-->
+</apex:form>
+</apex:page>

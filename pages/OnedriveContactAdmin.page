@@ -1,0 +1,9 @@
+<apex:page sidebar="true" showHeader="true" setup="true" >
+    <div style="margin:5%">
+        <center>
+            <span style="font-size:100px;color:magenta;font-weight:bold">
+                PLEASE CONTACT YOUR ADMINISTRATOR
+            </span>
+        </center>
+    </div>
+</apex:page>
