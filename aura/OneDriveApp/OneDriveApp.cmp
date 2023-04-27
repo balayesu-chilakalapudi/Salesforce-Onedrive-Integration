@@ -1,0 +1,370 @@
+<aura:component Implements="flexipage:availableForRecordHome,force:hasRecordId"
+                controller="OneDriveAppController">
+    <aura:attribute name="recordId" type="String" description="Record to which the files should be attached" />      
+    <aura:attribute name="showSpinner" type="boolean" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="showAddFolder" type="Boolean" />
+    <aura:attribute name="showAddFile" type="Boolean" />
+    <aura:attribute name="entrylist" type="List" />
+    <aura:attribute name="folderpath" type="List" />
+    <aura:attribute name="isModalOpen" type="boolean" default="false"/>
+    <aura:attribute name="isShareModalOpen" type="boolean" default="false"/>
+    <aura:attribute name="showProgress" type="boolean" default="false" />
+    <aura:attribute name="share" type="String" />
+    <aura:attribute name="picklistOptsList" type="User[]" />
+    <aura:attribute name="foldername" type="String" />
+    <aura:attribute name="connected" type="boolean" />
+    <aura:attribute name="isuploadfinishedModalOpen" type="boolean" />
+    <aura:attribute name="FolderCreator" type="String" />
+    <aura:attribute name="showSharedModalOpen" type="boolean" default="false" />
+    <aura:attribute name="OnedriveFolder" type="OneDriveFolder__c" />
+    <aura:attribute name="OnedrivePermission" type="Onedrive_Permission__c" />
+    <aura:attribute name="odsulist" type="List" />
+    <aura:attribute name="isRevokeModalOpen" type="boolean" default="false"/>
+    <aura:attribute name="isGrantModalOpen" type="boolean" default="false"/>
+    <aura:handler event="c:CloseGrantAccess" action="{!c.closeGrantAccessEvent}" />    
+    <aura:attribute name="OnedriveWrapper" type="OneDriveAppController.OnedriveWrapper" />
+    
+    <ltng:require styles="{! $Resource.select2 + '/select2-4.0.3/dist/css/select2.min.css'}" 
+                  scripts="{!join(',', 
+                           $Resource.jquery224 ,  
+                           $Resource.select2 + '/select2-4.0.3/dist/js/select2.js')
+                           }" 
+                  afterScriptsLoaded="{!c.scriptsLoaded}"/>
+    
+    <div style="padding:1%;background-color:white;height:300px;overflow:scroll"> 
+        <aura:if isTrue="{!v.showProgress}">
+            <lightning:spinner />
+            <aura:set attribute="else">
+                <aura:if isTrue="{!v.connected}">
+                <!--section 1 start-->  
+                <div class="slds-section slds-is-open" aura:id="fruitsSection">
+                    <!--section header-->
+                    <h3 class="slds-section__title">
+                        <button aria-controls="fruitsList" class="slds-button slds-section__title-action">
+                            <span onclick="{!c.toggleSection}" data-auraId="fruitsSection">
+                                <lightning:icon iconName="utility:switch"
+                                                size="x-small"
+                                                class="slds-section__title-action-icon slds-button__icon_left"
+                                                alternativeText="button icon" 
+                                                />
+                            </span>
+                            <table>
+                            	<tr>
+                                	<td align="left" style="text-align:left"><span class="slds-truncate" title="Fruits">Onedrive Cabinet</span></td>
+                                    <td align="right" style="text-align:right;"><span class="slds-truncate" title="Fruits">Owner:&nbsp;{!v.OnedriveFolder.Owner_Name__c} &nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+                                </tr>
+                            </table>
+                        </button>
+                    </h3>
+                    <!--section body-->
+                    <div class="slds-section__content" id="fruitsList">  
+                        <table>
+                            <tr>
+                                <td style="text-align:left">  
+                                    <a onclick="{!c.openPath}">
+                                        <lightning:buttonIcon size="small" variant="container" value="" iconName="utility:down" />
+                                        <lightning:icon size="small"  iconName="doctype:folder" alternativeText="Folder" />
+                                        &nbsp;{!v.OnedriveFolder.Name}
+                                    </a>
+                                </td>                
+                                <td style="text-align:right">  
+                                     <button id="sync" class="slds-button slds-button_neutral" onclick="{!c.doSync}"><lightning:icon size="small" iconName="utility:sync" alternativeText="Sync" />&nbsp;Sync</button>
+                                  	 <button id="sync" class="slds-button slds-button_neutral" onclick="{!c.doGrant}"><lightning:icon size="small" iconName="utility:edit" alternativeText="Edit Access" />&nbsp;Access Permissions</button>
+                                    <button id="sync" class="slds-button slds-button_neutral" onclick="{!c.doRequestForShare}"><lightning:icon size="small" iconName="utility:email" alternativeText="Request Access" />&nbsp;Request Access</button>
+                                    <!--
+                                    <button id="addfolder" class="slds-button slds-button_neutral" onclick="{!c.shareFolderWithMultiple}"><lightning:icon size="small"  iconName="utility:share" alternativeText="Share with multiple users" /> &nbsp; Share with multiple users </button>
+                                    <button id="addfolder" class="slds-button slds-button_neutral" onclick="{!c.shareFolderWithAllLHGlobalUsers}"><lightning:icon size="small"  iconName="utility:adduser" alternativeText="Share with all lh global users" /> &nbsp;Share with all lh global users </button>
+                                   -->
+									
+                                     <button id="addfile" class="slds-button slds-button_neutral" onclick="{!c.addFile}"><lightning:icon size="small" iconName="doctype:attachment" alternativeText="Add File" />&nbsp;Add File</button>
+                                    <!--
+                                     <button id="sync" class="slds-button slds-button_neutral" onclick="{!c.showShareDetails}"><lightning:icon size="small" iconName="utility:info_alt" alternativeText="Shared With" />&nbsp;View Access</button>
+                                   -->
+									  
+                                  
+                                   <!--
+                                    <button id="sync" class="slds-button slds-button_neutral" onclick="{!c.doRevoke}"><lightning:icon size="small" iconName="utility:remove_link" alternativeText="Revoke Access" />&nbsp;Revoke Access</button>
+                                	-->
+									</td>
+                            </tr>
+                        </table>    
+                        <table>
+                            <tr style="background-color:lightsteelblue;height:30px">
+                                <td>Name</td>
+                                <td>Size</td>
+                                <td>Created DateTime</td>
+                                <td>Created By</td>
+                                <td>LastModified DateTime</td>
+                            </tr>           
+                            <aura:iteration items="{!v.entrylist}" var="e">
+                                <tr>                        
+                                    <td>
+                                        <aura:if isTrue="{!e.folder!=null}">
+                                            <lightning:icon size="small"  iconName="doctype:folder" alternativeText="Folder" />
+                                            <a onclick="{!c.openItem}" id="{!e.driveId+';'+e.id}">{!e.name}</a>
+                                            <aura:set attribute="else">
+                                                <lightning:icon size="small" iconName="doctype:attachment" alternativeText="File" />
+                                           		<a href="{!e.downloadUrl}">{!e.name}</a>
+                                            </aura:set>
+                                        </aura:if>&nbsp;&nbsp;                                      
+                                    </td>
+                                    <td>{!e.size}</td>
+                                    <td>{!e.createdDateTime}</td>
+                                    <td>{!e.createdBy}</td>
+                                    <td>{!e.lastModifiedDateTime}</td>
+                                </tr>
+                            </aura:iteration>           
+                        </table>
+                    </div>
+                </div>
+                <!--section 1 end--> 
+                
+                
+                <!--Boolean attribute to indicate if modal is open or not 
+       default value is false as modal is closed when page is loaded 
+    -->
+                
+                
+                <div class="slds-m-around_xx-large">
+                    
+                    <!--Use aura:if tag to display/hide popup based on isModalOpen value-->  
+                    <aura:if isTrue="{!v.isModalOpen}">
+                        
+                        <!-- Modal/Popup Box starts here-->
+                        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                            <div class="slds-modal__container">
+                                <!-- Modal/Popup Box Header Starts here-->
+                                <header class="slds-modal__header">
+                                    <lightning:buttonIcon iconName="utility:close"
+                                                          onclick="{! c.closeModel }"
+                                                          alternativeText="close"
+                                                          variant="bare-inverse"
+                                                          class="slds-modal__close"/>
+                                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Add File</h2>
+                                </header>
+                                <!--Modal/Popup Box Body Starts here-->
+                                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1"> 
+                                     <aura:if isTrue="{!v.OnedrivePermission.Can_Edit__c==true}">
+                                    <lightning:fileUpload label="Upload File" 
+                                                          multiple="true" 
+                                                          recordId="{!v.recordId}" 
+                                                          aura:id="multifileUpload" 
+                                                          onuploadfinished="{!c.handleUploadFinished}" />
+                                         <aura:set attribute="else">
+                                             <center>
+                                                 <span style="color:yellow:font-size:15px">
+                                             Sorry, View Access only Available. <br />
+                                             Please request owner for upload permission.
+                                                     </span>
+                                                 </center>
+                                         </aura:set>
+                                    </aura:if>
+                                    <!--
+                       Choose File:&nbsp; <input type="file" class="file" aura:id="file" />
+      -->
+                                </div>
+                                <!--Modal/Popup Box Footer Starts here-->
+                                <footer class="slds-modal__footer">
+                                    <lightning:button variant="neutral"
+                                                      label="Cancel"
+                                                      title="Cancel"
+                                                      onclick="{! c.closeModel }"/>
+                                    <!--
+                                    <lightning:button variant="brand"
+                                                      label="OK"
+                                                      title="OK"
+                                                      onclick="{!c.submitDetails}"/>
+									-->
+                                </footer>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </aura:if>
+                    
+                    <div class="slds-m-around_xx-large">
+                        
+                        <!--Use aura:if tag to display/hide popup based on isModalOpen value-->  
+                        <aura:if isTrue="{!v.isShareModalOpen}">
+                            
+                            <!-- Modal/Popup Box starts here-->
+                            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                                <div class="slds-modal__container">
+                                    <!-- Modal/Popup Box Header Starts here-->
+                                    <header class="slds-modal__header">
+                                        <lightning:buttonIcon iconName="utility:close"
+                                                              onclick="{! c.closeShareModel }"
+                                                              alternativeText="close"
+                                                              variant="bare-inverse"
+                                                              class="slds-modal__close"/>
+                                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Share</h2>
+                                    </header>
+                                    <!--Modal/Popup Box Body Starts here-->
+                                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                        <div style="margin:2%">
+                                            <!--
+                                            <lightning:recordEditForm objectApiName="OneDriveFolder__c">
+                                                <lightning:inputfield variant="label-stacked" fieldName="Share__c" value="{!v.share}" />
+                                            </lightning:recordEditForm>
+                                            -->                                           
+                                            <c:onedriveshare4multiple recordId="{!v.recordId}" />
+                                            <br /><br />
+                                        </div>
+                                    </div>
+                                   
+                                </div>
+                            </section>
+                            <div class="slds-backdrop slds-backdrop_open"></div>
+                        </aura:if>
+                    </div>
+                    
+                </div>
+                    <aura:set attribute="else">
+                    	 <lightning:button variant="brand"
+                                                      label="Authorize Onedrive"
+                                                      title="Authorize Onedrive"
+                                                      onclick="{!c.authOneDrive}"/>
+                    </aura:set>
+                </aura:if>
+            </aura:set>        
+        </aura:if>
+         <!--Use aura:if tag to display/hide popup based on isFollowupModalOpen value-->  
+        <aura:if isTrue="{!v.isuploadfinishedModalOpen}">
+             
+            <!-- Modal/Popup Box starts here-->
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- Modal/Popup Box Header Starts here-->
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Message</h2>
+                    </header>
+                    <!--Modal/Popup Box Body Starts here-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <span style="color:blue;font-size:17px">                             
+                            Files uploaded to onedrive completed. Please click on Sync button.    
+                        </span>                   
+                    </div>
+                    <!--Modal/Popup Box Footer Starts here-->
+                    <footer class="slds-modal__footer">
+                      
+                        <lightning:button variant="neutral"
+                                          label="Cancel"
+                                          title="Cancel"
+                                          onclick="{! c.closeModel }"/>
+						
+                        <lightning:button variant="brand"
+                                          label="OK"
+                                          title="OK"
+                                          onclick="{!c.closeModel}"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+          <!--Use aura:if tag to display/hide popup based on isFollowupModalOpen value-->  
+        <aura:if isTrue="{!v.showSharedModalOpen}">
+             
+            <!-- Modal/Popup Box starts here-->
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <!-- Modal/Popup Box Header Starts here-->
+                    <header class="slds-modal__header">
+                        <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.closeModel }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Message</h2>
+                    </header>
+                    <!--Modal/Popup Box Body Starts here-->
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                       <span style="color:blue;font-size:17px"> 
+                           This Folder shared with Below users
+						                     
+                           </span>
+                         <div style="height:200px;overflow:scroll">
+     <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+         <thead>
+     		<tr class="slds-line-height_reset">
+         		<th class="" scope="col">Serial</th>
+                <th class="" scope="col">Username</th>
+        	 </tr>
+             </thead>
+         <tbody>
+              <aura:iteration items="{!v.odsulist}" var="odsu" indexVar="index">
+         	<tr>
+             	<td>{!index+1}  </td>
+                <td>{!odsu} </td>
+             </tr>
+             </aura:iteration>
+         </tbody>
+     </table>
+     </div>
+                    </div>
+                    <!--Modal/Popup Box Footer Starts here-->
+                    <footer class="slds-modal__footer">
+                      
+                        <lightning:button variant="neutral"
+                                          label="Cancel"
+                                          title="Cancel"
+                                          onclick="{! c.closeModel }"/>
+						
+                        <lightning:button variant="brand"
+                                          label="OK"
+                                          title="OK"
+                                          onclick="{!c.closeModel}"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+         <div class="slds-m-around_xx-large">
+                        
+                        <!--Use aura:if tag to display/hide popup based on isModalOpen value-->  
+                        <aura:if isTrue="{!v.isRevokeModalOpen}">
+                            
+                            <!-- Modal/Popup Box starts here-->
+                            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                                <div class="slds-modal__container">
+                                    <!-- Modal/Popup Box Header Starts here-->
+                                    <header class="slds-modal__header">
+                                        <lightning:buttonIcon iconName="utility:close"
+                                                              onclick="{! c.closeRevokeModel }"
+                                                              alternativeText="close"
+                                                              variant="bare-inverse"
+                                                              class="slds-modal__close"/>
+                                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Revoke Access</h2>
+                                    </header>
+                                    <!--Modal/Popup Box Body Starts here-->
+                                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                                        <div style="margin:2%">
+                                            <!--
+                                            <lightning:recordEditForm objectApiName="OneDriveFolder__c">
+                                                <lightning:inputfield variant="label-stacked" fieldName="Share__c" value="{!v.share}" />
+                                            </lightning:recordEditForm>
+                                            -->                                           
+                                            <c:OnedriveRevokeAccess recordId="{!v.recordId}" odsulist="{!v.odsulist}" />
+                                            <br /><br />
+                                        </div>
+                                    </div>
+                                   
+                                </div>
+                            </section>
+                            <div class="slds-backdrop slds-backdrop_open"></div>
+                        </aura:if>
+                    </div>
+                    
+                        
+                        <!--Use aura:if tag to display/hide popup based on isModalOpen value-->  
+                        <aura:if isTrue="{!v.isGrantModalOpen}">
+                            	<c:OnedriveGrantAccess recordId="{!v.recordId}" />
+                         </aura:if>
+                         
+                          
+    </div>
+</aura:component>

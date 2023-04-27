@@ -1,0 +1,70 @@
+<aura:component controller="OneDriveAppController">	
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="odulist" type="List" />
+    
+  <!--First Add jQuery and Select2 plugin library from static resource Using ltng:require tag-->  
+    <ltng:require styles="{! $Resource.select2 + '/select2-4.0.3/dist/css/select2.min.css'}" 
+      scripts="{!join(',', 
+        $Resource.jquery224 ,  
+        $Resource.select2 + '/select2-4.0.3/dist/js/select2.js')
+      }" afterScriptsLoaded="{!c.scriptsLoaded}"/>
+    
+  <!--init handler event call "doInit" function on component load and fetch picklist values-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+  <!--Declare Attributes--> 
+    <aura:attribute name="picklistOptsList" type="User[]"/>
+    <aura:attribute name="objAcc" type="Account" default="{sobjectType : 'Account'}" />
+    
+  <!--create form-->
+ <div class="slds-m-around--medium slds-form--stacked">  
+   
+     <!--Heading-->
+     <div class="slds-text-heading--large"></div>
+ 
+  
+ 
+ <!--for multi-select picklist [select2] -->    
+   <div class="slds-form-element">  
+     <label for="picklist">Select Users</label> <br/>
+     <select style="width:100%" id="picklist" class="select2Class" multiple="multiple">
+       <aura:iteration items="{!v.picklistOptsList}" var="opts">
+           <option value="{!opts.Id}"> {!opts.Name} </option>
+       </aura:iteration>     
+     </select>
+   </div>
+     <br />
+     <div style="height:200px;overflow:scroll">
+     <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+         <thead>
+     		<tr class="slds-line-height_reset">
+         		<th class="" scope="col">Name</th>
+                <th class="" scope="col">Onedrive Username</th>
+        	 </tr>
+             </thead>
+         <tbody>
+              <aura:iteration items="{!v.odulist}" var="odu">
+         	<tr>
+             	<td>{!odu.User_Name__c}  </td>
+                <td>{!odu.onedrive_username__c} </td>
+             </tr>
+             </aura:iteration>
+         </tbody>
+     </table>
+     </div>
+ <!--Account Save Button-->    
+  <div class="slds-form-element">    
+     <!--Modal/Popup Box Footer Starts here-->
+                                 
+                                        <lightning:button variant="neutral"
+                                                          label="Cancel"
+                                                          title="Cancel"
+                                                          onclick="{! c.closeShareModel }"/>
+                                        <lightning:button variant="brand"
+                                                          label="OK"
+                                                          title="OK"
+                                                          onclick="{!c.submitShareDetails}"/>
+                                  
+  </div>
+ </div>    
+</aura:component>

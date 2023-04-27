@@ -1,0 +1,68 @@
+@isTest
+public class OneDrivePageControllerTest {
+	 @testsetup
+    static void testdata(){
+        List<Onedrive__c> odlist=new List<Onedrive__c>();
+        Onedrive__c od=new Onedrive__c();
+        od.name=userinfo.getUserId();        
+        odlist.add(od);
+        Onedrive__c od2=new Onedrive__c();
+        od2.name='OneDriveTokens';
+        od2.access_token_part1__c='testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttestte';
+        od2.access_token_part2__c='testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttestte';
+        od2.access_token_part3__c='testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttestte';
+        od2.access_token_part4__c='testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttestte';
+        od2.access_token_part5__c='testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttestte';
+        od2.access_token_part6__c='testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttestte';
+        od2.access_token_part7__c='testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttestte';
+        od2.access_token_part8__c='testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttestte';
+        od2.access_token_part9__c='testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttestte';
+        od2.access_token_part10__c='testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttestte';
+        od2.access_token_part11__c='testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttestte';
+        od2.access_token_part12__c='testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttestte';
+        od2.refresh_token_part1__c='testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttestte';
+        od2.refresh_token_part2__c='testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttestte';
+        od2.refresh_token_part3__c='testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttestte';
+        od2.refresh_token_part4__c='testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttestte';
+        odlist.add(od2);
+        insert odlist;
+    }
+    @isTest
+    static void test1(){      
+        OneDrivePageController con=new OneDrivePageController();
+        OneDrivePageController.getToken('test');
+        Test.startTest();
+        Test.setMock(HttpCalloutMock.class, new OnedriveMockHttpResponseGenerator());
+        con.OnedriveAuth();     
+        Test.stopTest();
+    }
+    @isTest
+    static void test2(){
+        OneDrivePageController con=new OneDrivePageController();
+        Test.startTest();
+        Test.setMock(HttpCalloutMock.class, new OnedriveMockHttpResponseGenerator());   
+        con.code='abcdefgconhtestetesttesttestabcdefghtestetesttesttestabcdefghtestetesttesttestabcdefghtestetesttesttestabcdefghtestetesttesttestabcdefghtestetesttesttestabcdefghtestetesttesttestabcdefghtestetesttesttestabcdefghtestetesttesttestabcdefghtestetesttesttestabcdefghtestetesttesttestabcdefghtestetesttesttestabcdefghtestetesttesttestabcdefghtestetesttesttestabcdefghtestetesttesttestabcdefghtestetesttesttestabcdefghtestetesttesttestabcdefghtestetesttesttestabcdefghtestetesttesttestabcdefghtestetesttesttestabcdefghtestetesttesttestabcdefghtestetesttesttestabcdefghtestetesttesttestabcdefghtestetesttesttestabcdefghtestetesttesttestabcdefghtestetesttesttestabcdefghtestetesttesttestabcdefghtestetesttesttestabcdefghtestetesttesttestabcdefghtestetesttesttest';
+        con.AccessToken();
+        Test.stopTest();
+    }
+    @isTest
+    static void test3(){
+        OneDrivePageController con=new OneDrivePageController();
+        Test.startTest();
+        Test.setMock(HttpCalloutMock.class, new OnedriveMockHttpResponseGenerator());
+        String onedriveUser=userinfo.getUserId();
+        OneDrivePageController.doRefreshToken(onedriveUser);
+        Test.stopTest();
+    }   
+    public class OnedriveMockHttpResponseGenerator implements HttpCalloutMock {
+        // Implement this interface method
+        public  HTTPResponse respond(HTTPRequest req) {      
+            HttpResponse res = new HttpResponse();
+            res.setHeader('Content-Type', 'application/json');
+            res.setBody('{"refresh_token":"eyJ0eXAiOiJKV1QiLCJub25jZSI6IkRFOWEtTlpxdFVod0hrcTlPS1pUUGZqY2g3UndPTXpPdGVNeFl3aDZtYVkiLCJhbGciOiJSUzI1NiIsIng1dCI6IkhsQzBSMTJza3hOWjFXUXdtak9GXzZ0X3RERSIsImtpZCI6IkhsQzBSMTJza3hOWjFXUXdtak9GXzZ0X3RERSJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8zOTVlODFjNy00MWZkLTQyYTItYTcxYi1mY2ZiNDY4YzA5NGQvIiwiaWF0IjoxNTgyMjYyNTczLCJuYmYiOjE1ODIyNjI1NzMsImV4cCI6MTU4MjI2NjQ3MywiYWNjdCI6MCwiYWNyIjoiMSIsImFpbyI6IjQyTmdZSkRydkw1YTZ2YU1HUk1TZG1wYVNaam45SG11RExmNjVuQ2M1K1NaK3JhWEhvWUEiLCJhbXIiOlsicHdkIl0sImFwcF9kaXNwbGF5bmFtZSI6IkxIR2xvYmFsQVBJIiwiYXBwaWQiOiJiMmNiODhlOS01MGZiLTRhZDMtODljMC00YTc4N2RmOTE2ZTQiLCJhcHBpZGFjciI6IjEiLCJmYW1pbHlfbmFtZSI6IkRvcmppIiwiZ2l2ZW5fbmFtZSI6IlRhbmRpbiIsImlwYWRkciI6IjIyMy4yMzguNjYuMzciLCJuYW1lIjoiVGFuZGluIERvcmppIiwib2lkIjoiOWZlNDQ1NzMtOTEzZS00MzkxLWE4MTgtM2JlMDhhMDJlNGZlIiwicGxhdGYiOiIzIiwicHVpZCI6IjEwMDMyMDAwNTY3RjYxQ0EiLCJzY3AiOiJGaWxlcy5SZWFkV3JpdGUuQWxsIEZpbGVzLlJlYWRXcml0ZS5BcHBGb2xkZXIgcHJvZmlsZSBvcGVuaWQgZW1haWwiLCJzdWIiOiI4ejlCa055OFptWHQwYklmOTA0ZUF5aEdYNlVXb3o0amw1by1HV3FlNGZRIiwidGlkIjoiMzk1ZTgxYzctNDFmZC00MmEyLWE3MWItZmNmYjQ2OGMwOTRkIiwidW5pcXVlX25hbWUiOiJ0YW5kaW5AbGhnbG9iYWwuY28iLCJ1cG4iOiJ0YW5kaW5AbGhnbG9iYWwuY28iLCJ1dGkiOiIxMHlhV3N0NS1rQ3o2Ri0wMERJUkFBIiwidmVyIjoiMS4wIiwid2lkcyI6WyI2MmU5MDM5NC02OWY1LTQyMzctOTE5MC0wMTIxNzcxNDVlMTAiXSwieG1zX3N0Ijp7InN1YiI6InFLcnZfX2dvRjlyNjc5MkcwMjM1S2VUbUstbXp1NnRmbmRUaGF1bFBpWlUifSwieG1zX3RjZHQiOjE0OTU2MDc4ODN9.NNLUrwxVdyblQ5MDQBzVfa8RmIWzq0nbxekw91eH6-IEt2SwnY50ebrC1fnaQwEfTu7DBMwU12dnfCHZIEyRzl2e0ma5pzqOUGcxAuPs4EWY4mf_iCzfzMhUeWzBy_M2Tl-EDQ_RqCX8WU5u8VkuBhr8_DAndMxXf362K7zAr5OFRj8cWh8aqYhLFtqLK3ou6_eZe_mvYvwkRvnezl4wIl6ijCHYBiUs43BRhgijuJ0-ow_8q5Hm2pJzuqufVF81PLPhtqX9ZagNi5cfz0iZ7DRmlcCdVqsZmP3Lq5h4uoOdeMgteVCfoO7OHh2C5bIrbgW8bYg_lUW5CpHxy-VZTQ","access_token":"eyJ0eXAiOiJKV1QiLCJub25jZSI6IkRFOWEtTlpxdFVod0hrcTlPS1pUUGZqY2g3UndPTXpPdGVNeFl3aDZtYVkiLCJhbGciOiJSUzI1NiIsIng1dCI6IkhsQzBSMTJza3hOWjFXUXdtak9GXzZ0X3RERSIsImtpZCI6IkhsQzBSMTJza3hOWjFXUXdtak9GXzZ0X3RERSJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8zOTVlODFjNy00MWZkLTQyYTItYTcxYi1mY2ZiNDY4YzA5NGQvIiwiaWF0IjoxNTgyMjYyNTczLCJuYmYiOjE1ODIyNjI1NzMsImV4cCI6MTU4MjI2NjQ3MywiYWNjdCI6MCwiYWNyIjoiMSIsImFpbyI6IjQyTmdZSkRydkw1YTZ2YU1HUk1TZG1wYVNaam45SG11RExmNjVuQ2M1K1NaK3JhWEhvWUEiLCJhbXIiOlsicHdkIl0sImFwcF9kaXNwbGF5bmFtZSI6IkxIR2xvYmFsQVBJIiwiYXBwaWQiOiJiMmNiODhlOS01MGZiLTRhZDMtODljMC00YTc4N2RmOTE2ZTQiLCJhcHBpZGFjciI6IjEiLCJmYW1pbHlfbmFtZSI6IkRvcmppIiwiZ2l2ZW5fbmFtZSI6IlRhbmRpbiIsImlwYWRkciI6IjIyMy4yMzguNjYuMzciLCJuYW1lIjoiVGFuZGluIERvcmppIiwib2lkIjoiOWZlNDQ1NzMtOTEzZS00MzkxLWE4MTgtM2JlMDhhMDJlNGZlIiwicGxhdGYiOiIzIiwicHVpZCI6IjEwMDMyMDAwNTY3RjYxQ0EiLCJzY3AiOiJGaWxlcy5SZWFkV3JpdGUuQWxsIEZpbGVzLlJlYWRXcml0ZS5BcHBGb2xkZXIgcHJvZmlsZSBvcGVuaWQgZW1haWwiLCJzdWIiOiI4ejlCa055OFptWHQwYklmOTA0ZUF5aEdYNlVXb3o0amw1by1HV3FlNGZRIiwidGlkIjoiMzk1ZTgxYzctNDFmZC00MmEyLWE3MWItZmNmYjQ2OGMwOTRkIiwidW5pcXVlX25hbWUiOiJ0YW5kaW5AbGhnbG9iYWwuY28iLCJ1cG4iOiJ0YW5kaW5AbGhnbG9iYWwuY28iLCJ1dGkiOiIxMHlhV3N0NS1rQ3o2Ri0wMERJUkFBIiwidmVyIjoiMS4wIiwid2lkcyI6WyI2MmU5MDM5NC02OWY1LTQyMzctOTE5MC0wMTIxNzcxNDVlMTAiXSwieG1zX3N0Ijp7InN1YiI6InFLcnZfX2dvRjlyNjc5MkcwMjM1S2VUbUstbXp1NnRmbmRUaGF1bFBpWlUifSwieG1zX3RjZHQiOjE0OTU2MDc4ODN9.NNLUrwxVdyblQ5MDQBzVfa8RmIWzq0nbxekw91eH6-IEt2SwnY50ebrC1fnaQwEfTu7DBMwU12dnfCHZIEyRzl2e0ma5pzqOUGcxAuPs4EWY4mf_iCzfzMhUeWzBy_M2Tl-EDQ_RqCX8WU5u8VkuBhr8_DAndMxXf362K7zAr5OFRj8cWh8aqYhLFtqLK3ou6_eZe_mvYvwkRvnezl4wIl6ijCHYBiUs43BRhgijuJ0-ow_8q5Hm2pJzuqufVF81PLPhtqX9ZagNi5cfz0iZ7DRmlcCdVqsZmP3Lq5h4uoOdeMgteVCfoO7OHh2C5bIrbgW8bYg_lUW5CpHxy-VZTQ","start":0,"count":235,"data":[{"id":84,"firstName":"D","lastName":"Xie","email":null,"phone":null,"address":{"address1":null,"address2":null,"city":null,"state":null,"zip":null,"countryID":1,"countryName":"United States","countryCode":"US"},"lead":{"id":23},"owner":{"id":1,"firstname":"abc","lastname":"test"},"clientCorporation":{"id":1,"name":"test"}}]}');
+            res.setStatusCode(200);
+            res.setStatus('OK');
+            return res;
+        }        
+    }
+}
